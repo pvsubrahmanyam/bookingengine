@@ -31,13 +31,33 @@ return FALSE;
 }
 
 }
-// Getting name
-function data_insert($data) 
-{
-$result = mysql_query("SELECT name FROM users WHERE uid = $uid");
-$user_data = mysql_fetch_array($result);
-echo $user_data['name'];
-}
+// Getting single record
+function GetSingleRecord($table,$critfield,$criteria) {
+	
+			# returns a single record from $table in $db where $critfield =
+			# $criteria. Record is returned as normal associative array
+			# useful for avoiding several lines of code just to get one record
+		
+			$sql = "SELECT * FROM $table WHERE $critfield='".$criteria."'";
+			$res=mysql_query($sql);
+			if(mysql_num_rows($res)>0){
+				$row = mysql_fetch_array($res);		
+				return $row;
+			}	
+		}	
+		function GetRecord($table) {
+	
+			# returns a single record from $table in $db where $critfield =
+			# $criteria. Record is returned as normal associative array
+			# useful for avoiding several lines of code just to get one record
+		
+			$sql = "SELECT id,Name FROM $table";
+			$res=mysql_query($sql);
+			if(mysql_num_rows($res)>0){
+				$row = mysql_fetch_array($res);		
+				return $row;
+			}	
+		}	
 // Getting session 
 //add_action('init', 'myStartSession', 1);
 function get_session() 

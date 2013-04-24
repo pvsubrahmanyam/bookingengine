@@ -7,6 +7,13 @@ header('location:login.php');
 require_once('functions.php');
 require_once('connection.php');
 $user=new User(); 
+$sele=$_SESSION['sele'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+{
+	
+	$sele=$_REQUEST['sele'];
+	$_SESSION['sele']=$sele;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -14,6 +21,8 @@ $user=new User();
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>fitow</title>
 <link href="css/login.css" rel="stylesheet" type="text/css" />
+<link href="css/logout.css" rel="stylesheet" type="text/css" />
+<link href="css/inclusions.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 function MM_swapImgRestore() { //v3.0
   var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
@@ -36,29 +45,208 @@ function MM_swapImage() { //v3.0
   var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 }
+function newRoom(str)
+{
+	
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+       xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState == 4 )
+            {
+                if(xmlhttp.status == 200)
+    {
+    document.getElementById("content").innerHTML=xmlhttp.responseText;
+    }
+    else
+        {
+            alert("There was a problem while using XMLHTTP:\n" + xmlhttp.status);
+        }
+            }
+    }
+    xmlhttp.open("GET",str,true);
+    xmlhttp.send();
+}	
+	function editRoom(str)
+{
+	
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+       xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState == 4 )
+            {
+                if(xmlhttp.status == 200)
+    {
+    document.getElementById("content").innerHTML=xmlhttp.responseText;
+    }
+    else
+        {
+            alert("There was a problem while using XMLHTTP:\n" + xmlhttp.status);
+        }
+            }
+    }
+    xmlhttp.open("GET",str,true);
+    xmlhttp.send();
+
+}	
+
+function getProperty(str)
+{
+	
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+       xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState == 4 )
+            {
+                if(xmlhttp.status == 200)
+    {
+    document.getElementById("content").innerHTML=xmlhttp.responseText;
+    }
+    else
+        {
+            alert("There was a problem while using XMLHTTP:\n" + xmlhttp.status);
+        }
+            }
+    }
+    xmlhttp.open("GET",str,true);
+    xmlhttp.send();
+
+}function getProperty1(str)
+{
+	
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {// code for IE7+, Firefox, Chrome, Opera, Safari
+       xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// code for IE6, IE5
+       xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState == 4 )
+            {
+                if(xmlhttp.status == 200)
+    {
+    document.getElementById("content").innerHTML=xmlhttp.responseText;
+    }
+	 }
+    else
+        {
+            alert("There was a problem while using XMLHTTP:\n" + xmlhttp.status);
+        }
+           
+    }
+    xmlhttp.open("GET","wp_properties_ajax.php?id="+str,true);
+    xmlhttp.send();
+    subm();
+  }	
+  function subm()
+  {
+	   document.frm.submit();
+  }
+function load()
+{
+		
+var e=document.getElementById("ddlViewBy");
+var strUser = e.options[e.selectedIndex].value;
+getProperty("wp_properties_ajax.php?id="+strUser);
+
+}
+ 
 </script>
+<script type="text/javascript" src="js/jquery1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 </head>
 
-<body>
+<body onload="load()">
 <div id="Propertish_page_css">
 <div id="header_propertish">
 <div id="proprotish_logo"></div>
-
+ <a href="#" class="login_btn"><span><?php echo $_SESSION['user'] ?></span><div class="triangle"></div></a>
+                <div id="login_box">
+                    <div id="tab"></div>
+                    <div id="login_box_content"></div>
+                    <div id="login_box_content">
+                        <form id="login_form" action="logout.php">
+                         <input  type="submit" name="logout" value="LOGOUT" />
+                        </form>
+                    </div>
+                </div>
 </div>
+<form id="selfrm" name="frm" action="" method="post">
+<?php
+
+$result = mysql_query("SELECT * FROM wp_properties")
+or die(mysql_error());
+?>
+<div id="currenty_managing">
+<div id="text_currenty_managing">Currenty Managing</div>
+<div id="select_box">
+<select id="ddlViewBy"  name="sele" onChange="getProperty1(this.value)" class="select_1">
+
+<?php
+
+
+while($row1 = mysql_fetch_array($result))
+{
+	$r1=$row1['ppro_id'];
+	$select="";
+if($sele==$r1)
+{
+
+   $select="selected='selected'";	
+	}
+?> 
+   <option value="<?php echo $row1['ppro_id'];?>" <?php echo $select; ?> > <?php echo $row1['Name'];?> </option>
+  
+<?php
+}
+ ?>
+</select>
+
+
+</div></div>
+</form></div>
 <div id="main_content">
 <div id="navigation">
 <ul>
 <li>  <a href="dashboard.php">Dashboard</a></li>
-<li> <a href="#"> Inventary</a></li>
+<li> <a href="#"> Inventory</a></li>
 
 <li class="active">  <a href="propertymanager.php">Property Manager</a></li>
 
-<li>  <a href="#">Inclusions</a></li>
+<li>  <a href="inclusions.php">Inclusions</a></li>
 
 <li>  <a href="#">Reporting</a></li>
 
 <li> <a href="#"> Setting</a></li>
-<li> <a href="#"> Mesegrs</a></li>
+<li> <a href="#"> Messages</a></li>
 <li> <a href="logout.php"> Logout</a></li>
 
 
@@ -71,7 +259,7 @@ function MM_swapImage() { //v3.0
 <ul>
 <li> <a href="properties.php">Properties</a></li>
 <li class="active"> <a href="roomtypes.php">Room types</a></li>
-<li> <a href="roomtypes.php">Room pols</a></li>
+<li> <a href="roompools.php">Room pols</a></li>
 <li><a href="#"> Property PMS</a></li>
 
 
@@ -81,50 +269,8 @@ function MM_swapImage() { //v3.0
 </div>
 
 <div id="content">
-<div  id="new">
-<a href="addnewproperty.php">[ADD NEW ROOM]</a>
-</div>
-<div>
-<table border="2px" bordercolor="#8CCAE1"><tr>
-     <td width="75px">name</td>
-     <td width="75px">Rack Rate</td>
-     <td width="75px">Default price</td>
-    <td width="50px">Default Allocation</td>
-    <td width="50px">Default min stay</td>
-    <td width="50px">max persons</td>
-    <td width="150px">Adult included</td>
-     <td width="50px">Children included</td>
-     <td width="75px">Extra Adult cahrge</td>
-     <td width="75px">Extra Child cahrge</td>
-     <td width="75px">options</td> </tr>
-<?php
-$qry=mysql_query("SELECT * FROM wp_room_type");
-while($row=mysql_fetch_array($qry))
-{
-	?>
-<tr>
 
-<td><?php echo $row['name'];?></td>
-<td><?php echo $row['rackrate'];?></td>
-<td><?php echo $row['defaultrate'];?></td>
-<td><?php echo $row['defaultallocation'];?></td>
-<td><?php echo $row['defaultmin_stay'];?></td>
-<td><?php echo $row['maxpersons'];?></td>
-<td><?php echo $row['defaultinclusion'];?></td>
-<td>0</td>
-<td><?php echo $row['extraadult_rate'];?></td>
-<td><?php echo $row['extrachild_rate'];?></td>
-
-
-<td><a href="roomedit.php?id=<?php echo $row['roomid'];?>"> Edit</a></td>
-
- </tr>
- <?php
-}
-
-?>
- </table>         
-</div></div></div></div>
+</div></div></div>
 <div style="width:auto; height:150px; float:left;">  
 <?php
 //include(footer.php); 

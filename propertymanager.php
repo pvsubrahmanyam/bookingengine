@@ -1,4 +1,7 @@
 <?php
+ob_start();
+@session_start();
+
 require_once('functions.php');
 require_once('connection.php');
 @session_start();
@@ -6,14 +9,23 @@ if(!isset($_SESSION['userName']))
 {
 header('location:login.php');
 }
-
+$user=new User();
+$sele=$_SESSION['sele'];
+ if ($_SERVER["REQUEST_METHOD"] == "POST") 
+{
+	$sele=$_REQUEST['sele'];
+	$_SESSION['sele']=$sele;
+}
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>fitow</title>
 <link href="css/login.css" rel="stylesheet" type="text/css" />
+<link href="css/logout.css" rel="stylesheet" type="text/css" />
+<link href="css/inclusions.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 function MM_swapImgRestore() { //v3.0
   var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
@@ -37,13 +49,53 @@ function MM_swapImage() { //v3.0
    if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
 }
 </script>
+<script type="text/javascript" src="js/jquery1.4.2.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.2.custom.min.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 </head>
 
 <body>
 <div id="Propertish_page_css">
 <div id="header_propertish">
 <div id="proprotish_logo"></div>
+ <a href="#" class="login_btn"><span><?php echo $_SESSION['user'] ?></span><div class="triangle"></div></a>
+                <div id="login_box">
+                    <div id="tab"></div>
+                    <div id="login_box_content"></div>
+                    <div id="login_box_content">
+                        <form id="login_form" action="logout.php">
+                         <input  type="submit" name="logout" value="LOGOUT" />
+                        </form>
+                    </div>
+                </div>
+</div>
+<form id="selfrm" name="frm" action="" method="post">
+<?php
+ 
+$result = mysql_query("SELECT * FROM wp_properties")
+or die(mysql_error());
+?><div id="currenty_managing">
+<div id="text_currenty_managing">Currenty Managing</div>
+<div id="select_box">
+<select id="select_1" name="sele" onChange="this.form.submit();" >
 
+<?php
+while($row = mysql_fetch_array($result))
+{
+   $r1=$row['ppro_id'];
+	$select="";
+if($sele==$r1)
+{
+
+   $select="selected='selected'";	
+	}
+?>
+   <option value="<?php echo $row['ppro_id'];?>"<?php echo $select; ?> > <?php echo $row['Name'];;?> </option>
+  
+<?php } ?>
+</select>
+</div></div>
+</form>
 </div>
 <div id="main_content">
 <div id="navigation">
@@ -53,7 +105,7 @@ function MM_swapImage() { //v3.0
 
 <li class="active">  <a href="propertymanager.php">Property Manager</a></li>
 
-<li>  <a href="#">Inclusions</a></li>
+<li>  <a href="inclusions.php">Inclusions</a></li>
 
 <li>  <a href="#">Reporting</a></li>
 
@@ -71,7 +123,7 @@ function MM_swapImage() { //v3.0
 <ul>
 <li> <a href="properties.php">Properties</a></li>
 <li> <a href="roomtypes.php">Room types</a></li>
-<li> <a href="roomtypes.php">Room pols</a></li>
+<li> <a href="roompools.php">Room pols</a></li>
 <li><a href="#"> Property PMS</a></li>
 
 

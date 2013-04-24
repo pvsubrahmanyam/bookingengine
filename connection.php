@@ -8,10 +8,12 @@ error_reporting(E_ALL ^ E_NOTICE);
 		
 		$host = "localhost";	
 		$dbusername = "root";
-		//$dbusername = "fitowcom_stageus";
 		$dbpassword = "";
+		$dbname = "fitowengine";
+		//$dbusername = "fitowcom_stageus";
+		
 		//$dbpassword = "gLidm({[4rk~";
-                $dbname = "bookengine";
+         // $dbname = "fitowcom__stageDB";      
 		
 		class DB_Class 
       {	
